@@ -10,6 +10,7 @@ import { SplashScreen } from '@capacitor/splash-screen';
 import { Storage } from '@ionic/storage-angular';
 
 import { UserData } from './providers/user-data';
+import { FirebaseAnalytics } from '@capacitor-community/firebase-analytics';
 
 @Component({
   selector: 'app-root',
@@ -87,6 +88,35 @@ export class AppComponent implements OnInit {
         StatusBar.hide();
         SplashScreen.hide();
       }
+
+      // Initialize Firebase Analytics
+      FirebaseAnalytics.initializeFirebase({
+        apiKey: 'YOUR_API_KEY',
+        authDomain: 'YOUR_AUTH_DOMAIN',
+        projectId: 'YOUR_PROJECT_ID',
+        storageBucket: 'YOUR_STORAGE_BUCKET',
+        messagingSenderId: 'YOUR_MESSAGING_SENDER_ID',
+        appId: 'YOUR_APP_ID',
+        measurementId: 'YOUR_MEASUREMENT_ID'
+      });
+
+      // Log an event
+      this.logEvent();
+    });
+  }
+
+  logEvent() {
+    FirebaseAnalytics.logEvent({
+      name: 'select_content',
+      params: {
+        content_type: 'text',
+        item_id: 'id-001',
+        item_name: 'example_item'
+      }
+    }).then(() => {
+      console.log('Event logged');
+    }).catch((error) => {
+      console.error('Error logging event', error);
     });
   }
 
